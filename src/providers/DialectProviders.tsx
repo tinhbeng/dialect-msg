@@ -12,16 +12,27 @@ import {
   DialectSolanaWalletAdapter,
   SolanaConfigProps,
 } from "@dialectlabs/react-sdk-blockchain-solana";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { solanaWalletToDialectWallet } from "../utils";
+import { DialectDappsIdentityResolver } from "@dialectlabs/identity-dialect-dapps";
+import { SNSIdentityResolver } from "@dialectlabs/identity-sns";
+import { CardinalTwitterIdentityResolver } from "@dialectlabs/identity-cardinal";
 
 function SdkProvider({children}: any){
   const solanaWallet = useWallet();
+  const { connection } = useConnection();
   const [dialectSolanaWalletAdapter, setDialectSolanaWalletAdapter] =  useState<DialectSolanaWalletAdapter | null>(null);
   console.log("solanaWallet", solanaWallet)
   // Basic Dialect-related configuration
   const dialectConfig: ConfigProps = useMemo(
     () => ({
+      // identity: {
+      //   resolvers: [
+      //     new DialectDappsIdentityResolver(), // @dialectlabs/identity-dialect-dapps
+      //     new SNSIdentityResolver(connection), // @dialectlabs/identity-sns
+      //     new CardinalTwitterIdentityResolver(connection), // @dialectlabs/identity-cardinal
+      //   ],
+      // },
       // general environment to target
       environment: "development",
       dialectCloud: {
