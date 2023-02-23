@@ -22,17 +22,17 @@ function SdkProvider({children}: any){
   const solanaWallet = useWallet();
   const { connection } = useConnection();
   const [dialectSolanaWalletAdapter, setDialectSolanaWalletAdapter] =  useState<DialectSolanaWalletAdapter | null>(null);
-  console.log("solanaWallet", solanaWallet)
+  // console.log("solanaWallet", solanaWallet)
   // Basic Dialect-related configuration
   const dialectConfig: ConfigProps = useMemo(
     () => ({
-      // identity: {
-      //   resolvers: [
-      //     new DialectDappsIdentityResolver(), // @dialectlabs/identity-dialect-dapps
-      //     new SNSIdentityResolver(connection), // @dialectlabs/identity-sns
-      //     new CardinalTwitterIdentityResolver(connection), // @dialectlabs/identity-cardinal
-      //   ],
-      // },
+      identity: {
+        resolvers: [
+          new DialectDappsIdentityResolver(), // @dialectlabs/identity-dialect-dapps
+          new SNSIdentityResolver(connection), // @dialectlabs/identity-sns
+          new CardinalTwitterIdentityResolver(connection), // @dialectlabs/identity-cardinal
+        ],
+      },
       // general environment to target
       environment: "development",
       dialectCloud: {
@@ -40,7 +40,7 @@ function SdkProvider({children}: any){
         tokenStore: "local-storage",
       },
     }),
-    []
+    [connection]
   );
 
   // Solana-specific configuration
@@ -72,10 +72,12 @@ function SdkProvider({children}: any){
 function DialectProviders({ children }: any) {
   return (
     <SdkProvider>
-      {/* 'dark' | 'light' */}
-      <DialectThemeProvider theme="dark">
-        <DialectUiManagementProvider>{children}</DialectUiManagementProvider>
-      </DialectThemeProvider>
+      <DialectUiManagementProvider>
+        {/* 'dark' | 'light' */}
+        <DialectThemeProvider theme="dark">
+          {children}
+        </DialectThemeProvider>
+      </DialectUiManagementProvider>
     </SdkProvider>
   );
 };
